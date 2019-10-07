@@ -1,0 +1,4 @@
+{
+
+  "mongoURI": "mongodb://mern-admin:abc123@localhost:27017/mern_project"
+}
