@@ -2,6 +2,8 @@ const express = require("express");
 const auth = require('../../middleware/auth');
 const Profile = require('../../models/Profile');
 const User = require("../../models/User");
+const { check, validationResult } = require('express-validator/check');
+
 
 
 const router = express.Router();
@@ -26,5 +28,90 @@ router.get('/me', auth, async (req, res) => {
 	}
 
 })
+
+
+// @route POST api/profile
+// create or update user profile
+// @access Private
+
+router.post('/', [auth, [
+		  check('status', 'Status is required').not().isEmpty(),
+	    check('skills', 'Skills is required').not().isEmpty()
+		]],
+	  async (req, res) => {
+	  	const errors = validationResult(req);
+	  	if (!errors.isEmpty()) {
+        return res.status(422).json({ errors: errors.array() });
+      }
+
+      const {
+        company,
+        website,
+      	location,
+      	status,
+      	skills,
+      	bio,
+      	githubusername,
+      	youtube,
+      	twitter,
+      	facebook,
+      	linkedin,
+      	instagram
+        } = req.body;
+
+
+      // Build profile object
+      const profileFileds = {}
+
+      profileFileds.user = req.user.id
+      if (company) profileFileds.company = company;
+      if (website) profileFileds.website = website;
+      if (location) profileFileds.location = location;
+      if (status) profileFileds.status = status;
+      if (bio) profileFileds.bio = bio;
+      if (githubusername) profileFileds.githubusername = githubusername;
+      if (skills) {
+      	profileFileds.skills = skills.split(',').map( skill => skill.trim());
+
+      }
+
+      // build social object
+      profileFileds.social = {}
+      if(facebook) profileFileds.social.facebook = facebook;
+      if(youtube) profileFileds.social.youtube = youtube;
+      if(twitter) profileFileds.social.twitter = twitter;
+      if(linkedin) profileFileds.social.linkedin = linkedin;
+      if(instagram) profileFileds.social.instagram = instagram;
+
+
+
+
+      try{
+      	let profile = await Profile.findOne({user: req.user.id});
+      	if(profile) {
+          // update profile
+          profile = await Profile.findOneAndUpdate(
+          	{user: req.user.id},
+          	{$set: profileFileds},
+          	{new: true}
+          );
+          return res.json(profile);
+      	}
+        // create profile
+        profile = new Profile(profileFileds)
+        await profile.save
+        res.json(profile);
+      }catch(err) {
+      	console.error(err.message);
+        res.status(500).send('server error');
+
+      }
+
+
+
+
+
+	  }
+	)
 
 module.exports = router;
