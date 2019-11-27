@@ -14,6 +14,7 @@
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "config": "^3.2.3",
+    "eslint-plugin-react-hooks": "0.0.0-b53ea6ca0",
     "express": "^4.17.1",
     "express-validator": "^6.2.0",
     "gravatar": "^1.8.0",
