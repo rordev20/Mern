@@ -72,6 +72,8 @@ router.post('/', [auth, [
       if (status) profileFileds.status = status;
       if (bio) profileFileds.bio = bio;
       if (githubusername) profileFileds.githubusername = githubusername;
+
+      console.log(skills)
       if (skills) {
         profileFileds.skills = skills.split(',').map( skill => skill.trim());
 
