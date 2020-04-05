@@ -1,0 +1,7 @@
+{
+
+  "mongoURI": "mongodb+srv://rordev20:rordev20@cluster0-fjuei.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "mysecrettoken",
+  "githubClientId": "52143a5dfbce38e66e47",
+  "githubSecret": "11393e9d36ede643329244b76abe2cc09a688702"
+}
